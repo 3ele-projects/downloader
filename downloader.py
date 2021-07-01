@@ -17,13 +17,11 @@ def load_keepass_data(file, password):
         record['project'] = entry.title
         record['ftp_pass'] = entry.password
         record['ftp_user'] = entry.username
-        record['ftp_server'] =entry.custom_properties['ftp_server']
-        record['source'] =entry.custom_properties['source']
-        record['target'] =entry.custom_properties['target']
-      
+        record['ftp_server'] = entry.custom_properties['ftp_server']
+        record['source'] = entry.custom_properties['source']
+        record['target'] = entry.custom_properties['target']
         data.append(record)
     return data
-
     kp.save()
 
 def fetch_files(ftp, path, destination, overwrite=False):
