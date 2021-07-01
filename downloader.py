@@ -19,7 +19,7 @@ def load_keepass_data(file, password):
         record['ftp_user'] = entry.username
         record['ftp_server'] = entry.custom_properties['ftp_server']
         record['source'] = entry.custom_properties['source']
-        record['target'] = entry.custom_properties['target']
+    
         data.append(record)
     return data
     kp.save()
