@@ -44,7 +44,7 @@ def fetch_files(ftp, path, destination, overwrite=False):
                     ftp.retrbinary('RETR ' + file[0], f.write)
                 print(file[0] + '  downloaded')
         
-def main(file, base_path='mnt/ARCHIV/', target="/wp/wp-content/updraft/" ):
+def main(file, base_path='mnt/ARCHIV/', target="/wp/wp-content/updraft/"):
     password = getpass.getpass('Password: ') 
     data = load_keepass_data(file, password)
     if data:
