@@ -19,7 +19,7 @@ def load_keepass_data(file, password):
         record['ftp_user'] = entry.username
         record['ftp_server'] = entry.custom_properties['ftp_server']
         record['source'] = entry.custom_properties['source']
-    
+#        record['target'] = entry.custom_properties['target']
         data.append(record)
     return data
     kp.save()
@@ -27,8 +27,9 @@ def load_keepass_data(file, password):
 def fetch_files(ftp, path, destination, overwrite=False):
     try:
         ftp.cwd(path)
-        ftp.retrlines('LIST')
+ #       ftp.retrlines('LIST')
     except OSError:  
+        print (OSError)
         pass
     except ftplib.error_perm:
         print("error: could not change to " + path)
@@ -36,9 +37,13 @@ def fetch_files(ftp, path, destination, overwrite=False):
     filelist = [i for i in ftp.mlsd()]
     for file in filelist:      
         if file[1]['type'] == 'file' and (file[0].endswith('.zip') or file[0].endswith('.gz')):         
+            print (file[0] +  '   check')
+        
             fullpath = os.path.join(destination, file[0])
             if (not overwrite and os.path.isfile(fullpath)):
                 continue
+                print(file[0] + '  skipped')
+
             else:
                 with open(fullpath, 'wb') as f:
                     ftp.retrbinary('RETR ' + file[0], f.write)
@@ -49,6 +54,7 @@ def main(file, base_path='mnt/ARCHIV/', target="/wp/wp-content/updraft/"):
     data = load_keepass_data(file, password)
     if data:
         for record in data:
+            print (record['project'])
             full_path = base_path + record['project'] + target
             Path(full_path).mkdir(parents=True, exist_ok=True)
             ftp = FTP(record['ftp_server'])
