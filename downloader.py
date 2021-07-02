@@ -38,11 +38,10 @@ def fetch_files(ftp, path, destination, overwrite=False):
     for file in filelist:      
         if file[1]['type'] == 'file' and (file[0].endswith('.zip') or file[0].endswith('.gz')):         
             print (file[0] +  '   check')
-        
             fullpath = os.path.join(destination, file[0])
-            if (not overwrite and os.path.isfile(fullpath)):
+            print (os.path.isfile(fullpath) , fullpath )
+            if (overwrite and os.path.isfile(fullpath)):
                 continue
-                print(file[0] + '  skipped')
 
             else:
                 with open(fullpath, 'wb') as f:
@@ -50,17 +49,23 @@ def fetch_files(ftp, path, destination, overwrite=False):
                 print(file[0] + '  downloaded')
         
 def main(file, base_path='mnt/ARCHIV/', target="/wp/wp-content/updraft/"):
-    password = getpass.getpass('Password: ') 
+    password = getpass.getpass('Password: ')
     data = load_keepass_data(file, password)
     if data:
         for record in data:
-            print (record['project'])
+            print (record['project'] + '  start')
             full_path = base_path + record['project'] + target
             Path(full_path).mkdir(parents=True, exist_ok=True)
             ftp = FTP(record['ftp_server'])
-            ftp.login(record['ftp_user'], record['ftp_pass'])
-            fetch_files(ftp,record['source'], full_path, overwrite=True)
-            ftp.quit()
+            try:
+                ftp.login(record['ftp_user'], record['ftp_pass'])
+                fetch_files(ftp,record['source'], full_path, overwrite=True)
+                ftp.quit()
+            except Exception as e:
+                print ('FTP Login error')
+                print (e)
+
+
 if __name__ == '__main__':
     fire.Fire(main)
     
