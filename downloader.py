@@ -56,7 +56,7 @@ def main(file, base_path='mnt/ARCHIV/', target="/wp/wp-content/updraft/"):
             print (record['project'] + '  start')
             full_path = base_path + record['project'] + target
             Path(full_path).mkdir(parents=True, exist_ok=True)
-            ftp = FTP(record['ftp_server'])
+            ftp = FTP(record['ftp_server'].strip())
             try:
                 ftp.login(record['ftp_user'], record['ftp_pass'])
                 fetch_files(ftp,record['source'], full_path, overwrite=True)
