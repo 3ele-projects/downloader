@@ -155,7 +155,10 @@ class WPBackuper:
                         self.log_row['messages']['errors'].append(str(e))
                    
                 else:
-                    ftp = FTP(record['ftp_server'].strip())     
+                    try:
+                        ftp = FTP(record['ftp_server'].strip())     
+                    except Exception as e:
+                        self.log_row['messages']['errors'].append(str(e))
                     try:
                         ftp.login(record['ftp_user'], record['ftp_pass'])
                         self.fetch_ftp_files(ftp,record['source'], full_path, overwrite=False)
