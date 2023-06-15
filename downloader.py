@@ -177,7 +177,7 @@ class WPBackuper:
                     record['project']:self.log_row
                 })
 
-            with open('data.json', 'w') as f:
+            with open('/volume2/WP_ARCHIV/data.json', 'w') as f:
                     json.dump(self.logs, f,  indent=4)
 
 
